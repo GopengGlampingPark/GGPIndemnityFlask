@@ -86,7 +86,7 @@ lock = Lock()
 @app.route("/genbookid", methods=["POST", "GET"])
 def genbookid():
 	if request.method == "POST":
-		C_bookingID = generate_sequential_id("GroupInformation", "GGPBOOKID_")
+		C_bookingID = generate_sequential_id("GGP", "GGPBOOKID_")
 		session['bookingName'] = request.form.get('bookingName')  # Ensure 'groupName' comes from the form
 		session['C_bookingID'] = C_bookingID
 		bookingName = session.get("bookingName")
