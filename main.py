@@ -107,12 +107,13 @@ def genbookid():
 	return render_template("bookingID.html")
 
 def insert_group_to_sheet():
+	print(f"function insert group to sheet called")
 	bookingName = session.get("bookingName")
-	C_bookingID = session.get("C_bookingID")
+	genbookid = session.get("genbookid")
 
-	if C_bookingID:
+	if genbookid:
 		group_info = [[
-			C_bookingID,
+			genbookid,
 			bookingName
 		]]
 		print("Group INFO : ", group_info)
