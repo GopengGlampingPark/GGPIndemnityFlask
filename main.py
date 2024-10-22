@@ -65,12 +65,12 @@ logging.basicConfig(
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive.file']
 
 #### RENDER #########################################################################################################################################
-SERVICE_ACCOUNT_INFO = json.loads(os.environ.get('GOOGLE_SERVICE_ACCOUNT_JSON'))
-credentials = ServiceAccountCredentials.from_json_keyfile_dict(SERVICE_ACCOUNT_INFO, scopes=SCOPES)
+### SERVICE_ACCOUNT_INFO = json.loads(os.environ.get('GOOGLE_SERVICE_ACCOUNT_JSON'))
+### credentials = ServiceAccountCredentials.from_json_keyfile_dict(SERVICE_ACCOUNT_INFO, scopes=SCOPES)
 
 #### LOCAL #########################################################################################################################################
-### SERVICE_ACCOUNT_INFO = 'ggp-indemnity-form-5ae555d2a987.json'
-### credentials = ServiceAccountCredentials.from_json_keyfile_name(SERVICE_ACCOUNT_INFO, scopes=SCOPES)
+SERVICE_ACCOUNT_INFO = 'ggp-indemnity-form-5ae555d2a987.json'
+credentials = ServiceAccountCredentials.from_json_keyfile_name(SERVICE_ACCOUNT_INFO, scopes=SCOPES)
 
 client = gspread.authorize(credentials)
 
@@ -339,6 +339,7 @@ def insert_to_sheet():
 		healthInfo = [[
 			C_bookingID,
 			C_UniqueID,
+			session.get("fullname"),
 			", ".join(session.get("health_fields", []))
 		]]
 		print("healthinfo : ", healthInfo)
