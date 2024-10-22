@@ -315,6 +315,7 @@ def insert_to_sheet():
 
 	if session.get("age") == "below12" or session.get("age") == "13-17":
 		under18info = [[
+			C_bookingID,
 			C_UniqueID,
 			session.get("acknowledgement"),
 			session.get("gname"),
@@ -326,6 +327,7 @@ def insert_to_sheet():
 
 	if session.get("staynot") == "stayinguest":
 		bookingInfo = [[
+			C_bookingID
 			C_UniqueID,
 			session.get("checkin"),
 			session.get("checkout")
@@ -335,6 +337,7 @@ def insert_to_sheet():
 
 	if session.get("health_fields"):
 		healthInfo = [[
+			C_bookingID,
 			C_UniqueID,
 			", ".join(session.get("health_fields", []))
 		]]
