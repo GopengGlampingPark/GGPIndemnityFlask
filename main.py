@@ -327,7 +327,7 @@ def insert_to_sheet():
 
 	if session.get("staynot") == "stayinguest":
 		bookingInfo = [[
-			C_bookingID
+			C_bookingID,
 			C_UniqueID,
 			session.get("checkin"),
 			session.get("checkout")
