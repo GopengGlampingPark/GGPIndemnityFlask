@@ -86,7 +86,7 @@ lock = Lock()
 @app.route("/genbookid", methods=["POST", "GET"])
 def genbookid():
 	if request.method == "POST":
-		genbookid = generate_sequential_id("GGPBOOKID_")
+		genbookid = generate_sequential_id("GOG")
 		session['bookingName'] = request.form.get('bookingName')  # Ensure 'groupName' comes from the form
 		session['genbookid'] = genbookid
 		bookingName = session.get("bookingName")
@@ -126,7 +126,7 @@ def indemnityform():
 		for field in formfield:
 			session[field] = request.form[field]
 
-		if session.get("age") == "below12" or session.get("age") == "13-17":
+		if int(session.get("age")) < 18:
 			return redirect(url_for("under18"))
 		else:
 			if session["staynot"] == "stayinguest":
@@ -160,7 +160,7 @@ def under18():
 			return jsonify({'error': 'Failed to receive signature'}), 400  # Minimal error response
 
 	elif "age" in session:
-		if session.get("age") == "below12" or session.get("age") == "13-17":
+		if int(session.get("age")) < 18:
 			return render_template("under18.html")
 	
 	else:
@@ -299,6 +299,7 @@ def insert_to_sheet():
 		session.get("fullname"),
 		session.get("gender"),
 		session.get("age"),
+		None,
 		session.get("NRIC"),
 		session.get("email"),
 		session.get("contact"),
@@ -313,10 +314,11 @@ def insert_to_sheet():
 	print("cleintinfo : ", clientinfo)
 	append_to_sheet('Client_Information', clientinfo)
 
-	if session.get("age") == "below12" or session.get("age") == "13-17":
+	if int(session.get("age")) < 18:
 		under18info = [[
 			C_bookingID,
 			C_UniqueID,
+			session.get("age"),
 			session.get("acknowledgement"),
 			session.get("gname"),
 			session.get("gcontact"),
@@ -451,7 +453,7 @@ def generate_sequential_id(prefix):
 ######################################################################################################################## HEALTH CONDITION EMAILS
 def health_emails(clientID):
 
-	C_bookingID = session.get("C_bookingID")
+	C_bookingID = session.get("bookingID")
 	sheet = spreadsheet.worksheet("GroupInformation")
 	ids = sheet.col_values(1)
 
@@ -465,7 +467,7 @@ def health_emails(clientID):
 	except ValueError:
 		# Handle the case where the booking ID is not found
 		print(f"Booking ID {C_bookingID} not found in the sheet or walk-in client.")
-		BookingName = None  # Set BookingName to None if not found
+		BookingName = "WalkIn"  # Set BookingName to None if not found
 
 	print(f"sending health emails")
 	activities_info = [
